@@ -3,7 +3,6 @@ const mysql = require('mysql');
 const cn = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: '',
     database: 'nodemysql'
 });
 // Função para conectar ao banco de dados
@@ -26,7 +25,7 @@ async function selectFull() {
                 console.log('Erro ao consultar o banco de dados:', err);
                 reject(err);
             } else {
-                //console.log(JSON.parse(JSON.stringify(results)));
+                console.log(JSON.parse(JSON.stringify(results)));
                 resolve(JSON.parse(JSON.stringify(results)));
             }
         });
@@ -42,12 +41,66 @@ async function insertClient(Nome, Idade, UF) {
                 console.log('Erro ao inserir o registro:', err);
                 reject(err);
             } else {
-                console.log('Registro inserido com sucesso!', results);
+                console.log('Registro inserido com sucesso!');
                 resolve(results);
             }
         });
     });
 }
 
-connectToDatabase();
-selectFull();
+// SELECIONAR PELO ID
+async function selectById(id) {
+    const query = 'SELECT * FROM Clientes WHERE id = ?';
+    return new Promise((resolve, reject) => {
+        cn.query(query, [id], (err, results, fields) => {
+            if (err) {
+                console.log('Erro ao consultar o banco de dados:', err);
+                reject(err);
+            } else {
+                console.log(JSON.parse(JSON.stringify(results)));
+                resolve(JSON.parse(JSON.stringify(results)));
+            }
+        });
+    });
+}
+
+// DELETAR PELO ID
+async function deleteById(id) {
+    const query = 'DELETE FROM Clientes WHERE id = ?';
+    return new Promise((resolve, reject) => {
+        cn.query(query, [id], (err, results, fields) => {
+            if (err) {
+                console.log('Erro ao consultar o banco de dados:', err);
+                reject(err);
+            } else {
+                console.log('deletado');
+                resolve(results.affectedRows > 0);
+            }
+        });
+    });
+}
+
+async function updateById(Nome, Idade, UF, id) {
+    const query = 'UPDATE Clientes SET Nome = ?, Idade = ?, UF = ? WHERE id = ?';
+    return new Promise((resolve, reject) => {
+        cn.query(query, [Nome, Idade, UF, id], (err, results, fields) => {
+            if (err) {
+                console.log('Erro ao atualizar o registro: ', err);
+                reject(err);
+            } else {
+                console.log('Registro atualizado com sucesso!');
+                resolve(results);
+            }
+        });
+    });
+}
+
+//connectToDatabase();
+//insertClient('Sofia', 18, 'SP');
+//selectFull();
+//deleteById(4);
+//updateById('João', 18, 'MG', 2);
+//selectFull();
+
+//selectById(2);
+module.exports = { selectFull, selectById, deleteById, insertClient, updateById };
