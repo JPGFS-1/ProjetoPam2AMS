@@ -26,8 +26,24 @@ async function selectFull() {
                 console.log('Erro ao consultar o banco de dados:', err);
                 reject(err);
             } else {
-                console.log(JSON.parse(JSON.stringify(results)));
+                //console.log(JSON.parse(JSON.stringify(results)));
                 resolve(JSON.parse(JSON.stringify(results)));
+            }
+        });
+    });
+}
+
+// ROTEAMENTO PARA INSERIR
+async function insertClient(Nome, Idade, UF) {
+    const query = 'INSERT INTO Clientes (Nome, Idade, UF) VALUES (?, ?, ?)';
+    return new Promise((resolve, reject) => {
+        cn.query(query, [Nome, Idade, UF], (err, results) => {
+            if (err) {
+                console.log('Erro ao inserir o registro:', err);
+                reject(err);
+            } else {
+                console.log('Registro inserido com sucesso!', results);
+                resolve(results);
             }
         });
     });
