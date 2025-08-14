@@ -17,4 +17,21 @@ const connectToDatabase = () => {
         }
     });
 }
+
+async function selectFull() {
+    const query = 'SELECT * FROM Clientes';
+    return new Promise((resolve, reject) => {
+        cn.query(query, (err, results, fields) => {
+            if (err) {
+                console.log('Erro ao consultar o banco de dados:', err);
+                reject(err);
+            } else {
+                console.log(JSON.parse(JSON.stringify(results)));
+                resolve(JSON.parse(JSON.stringify(results)));
+            }
+        });
+    });
+}
+
 connectToDatabase();
+selectFull();
