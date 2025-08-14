@@ -101,6 +101,5 @@ async function updateById(Nome, Idade, UF, id) {
 //deleteById(4);
 //updateById('João', 18, 'MG', 2);
 //selectFull();
-
 //selectById(2);
 module.exports = { selectFull, selectById, deleteById, insertClient, updateById };

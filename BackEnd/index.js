@@ -1,18 +1,35 @@
 // incluir o banco
 const db = require('./conf/autenticacao.js');
 const express = require('express');
-let body = require('body-parser');
+let bodyParser = require('body-parser');
 let cors = require('cors');
-let methodOverride = require('method-override');
+let methodOvirride = require('method-override');
 const app = express();
 const port = 3000;
+//Vincule middlewares
+app.use(cors());
+// Permite que você use verbos HTTP
+app.use(methodOvirride('X-HTTP-Method'));
+app.use(methodOvirride('X-HTTP-Method-Override'));
+app.use(methodOvirride('X-Method-Override'));
+app.use(methodOvirride('_method'));
+ 
+app.use((req, resp, next) => {
+  resp.header("Acess-Control-Allow-Origin", "*");
+  resp.header("Acess-Control-Allow-Headers", "Origin, X-Request-With, Content-Type, Accep");
+  next()
+});
 
-// rota (get/post/put/delete)
-// raiz
-app.get('/', (req, res) => {
-  res.send({"text":'Hello World!'});
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
+//ROTEAMENTO RAIZ
+app.get('/', async (req, res) => {
+  const results =  await db.selectFull();
+  console.log(results);
+  res.json(results);
 });
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
-});
+}
