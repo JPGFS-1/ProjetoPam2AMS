@@ -95,7 +95,7 @@ async function updateById(Nome, Idade, UF, id) {
   });
 }
 
-//connectToDatabase();
+connectToDatabase();
 //insertClient('José', 18, 'SP');
 //selectFull();
 //deleteById(4);

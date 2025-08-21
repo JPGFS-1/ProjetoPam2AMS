@@ -26,17 +26,47 @@ app.use((req, resp, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-//ROTEAMENTO RAIZ
+// ROTEAMENTO RAIZ
 app.get("/", async (req, res) => {
   const results = await db.selectFull();
   console.log(results);
   res.json(results);
 });
 
-//ROTEAMENTO PARA BUSCAR PELO ID
-app.get("/clientes/", async (req, res) => {
-  const id = req.query.id;
+// ROTEAMENTO PARA BUSCAR PELO ID
+app.get("/clientes/:id", async (req, res) => {
+  const id = req.params.id;
   const results = await db.selectById(id);
+  console.log(results);
+  res.json(results);
+});
+
+// ROTEAMENTO PARA INSERIR
+app.post("/clientes/", async (req, res) => {
+  const Nome = req.body.Nome;
+  const Idade = req.body.Idade;
+  const UF = req.body.UF;
+  //const results = await db.insertClient(Nome, Idade, UF);
+  console.log(results);
+  res.json(results);
+});
+
+// ROTEAMENTO PARA ATUALIZAR
+app.put("/clientes/:id", async (req, res) => {
+  const id = req.params.id;
+  const Nome = req.body.Nome;
+  const Idade = req.body.Idade;
+  const UF = req.body.UF;
+  //const { Nome, Idade, UF } = req.body;
+  const results = await db.updateById(Nome, Idade, UF, id);
+  console.log(results);
+  res.json(results);
+});
+
+//DELETAR PELO ID
+app.delete("/clientes/:id", async (req, res) => {
+  const id = req.params.id;
+  const results = await db.deleteById(id);
   console.log(results);
   res.json(results);
 });
